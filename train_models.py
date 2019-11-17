@@ -172,19 +172,19 @@ def split_df(dfm, chunk_size):
 
 if __name__ == '__main__':
     models = ['RNN', 'CNN']
-    model = input("Select model to train from {}: ".format(models))
-    datapath = input("Please input path to OCHLV .csv file: ")
-    num_chunks = int(input("Chunk size for training. Max is num_rows(dataframe): "))
-    outputpath = input("Please input path to save and/or load models into/from: ")
-    lr = float(input("Learning rate: "))
-    epochs = int(input("Epochs: "))
+    model = input("Select model to train from {} (default: CNN): ".format(models)) or 'CNN'
+    datapath = input("Please input path to OCHLV .csv file (default: tests/600_candles.csv): ") or 'tests/600_candles.csv'
+    num_chunks = int(input("Chunk size for training. Max is num_rows(dataframe) (default: 120): ") or 120) 
+    outputpath = input("Please input path to save and/or load models into/from (default: ./output): ") or './output'
+    lr = float(input("Learning rate (default: 0.001): ") or 0.001)
+    epochs = int(input("Epochs (default: 5): ") or 5) 
     debug = False
     
     candles_big = pd.read_csv(datapath)
 
 
     chunks = split_df(candles_big, num_chunks)
-    start_chunk = int(input("Select chunk to start training from (out of {}): ".format(len(chunks))))
+    start_chunk = int(input("Select chunk to start training from (out of {}) (default: 1): ".format(len(chunks))) or 1)
     
     for i, candles_chunk in enumerate(chunks):
         if i < start_chunk: 
