@@ -1,4 +1,5 @@
 """This module contains methods relevant to creating a chart image for securities"""
+import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.widgets import LassoSelector
 from matplotlib.path import Path
@@ -17,6 +18,7 @@ from matplotlib.transforms import Affine2D
 from six.moves import xrange, zip
 
 import warnings
+matplotlib.use('TkAgg')
 
 ############### The following are MATPLOTLIB retired methods #######################
 
