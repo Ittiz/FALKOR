@@ -22,8 +22,11 @@ params = {'batch_size': 1,
 
 def _train(train_dl, model, optim, error_func, debug=False):
     losses = []
-    for batch, labels in train_dl:    
-        batch, labels = batch.cuda().float(), labels.cuda().float()
+    for batch, labels in train_dl:
+        if torch.cuda.is_available():    
+            batch, labels = batch.cuda().float(), labels.cuda().float()
+        else:
+            batch, labels = batch.float(), labels.float()
         
         if debug: print("batch[0] __str__: {} labels[0] __str__: {}".format(batch[0], labels[0]))
         # set model to train mode
@@ -50,7 +53,10 @@ def _valid(valid_dl, model, optim, error_func):
         losses = []
 
         for batch, labels in valid_dl:
-            batch, labels = batch.cuda().float(), labels.cuda().float()
+            if torch.cuda.is_available(): 
+                batch, labels = batch.cuda().float(), labels.cuda().float()
+            else:
+                batch, labels = batch.float(), labels.float()
             
             # set to eval mode
             model.eval()
@@ -70,7 +76,10 @@ def _test(test_dl, model, optim, error_func):
         losses = []
 
         for batch, labels in test_dl:
-            batch, labels = batch.cuda().float(), labels.cuda().float()
+            if torch.cuda.is_available(): 
+                batch, labels = batch.cuda().float(), labels.cuda().float()
+            else:
+                batch, labels = batch.float(), labels.float()
             
             # set to eval mode
             model.eval()
@@ -138,13 +147,16 @@ def train_on_df(model, candles_df, lr, num_epochs, model_type, debug):
     train(model=model, optim=optim, error_func=RMSE, num_epochs=num_epochs, train_dl=train_dl, valid_dl=valid_dl, debug=debug)
 
 def train_rnn(candles, file_name, lr, num_epochs, debug):
-    model = RNN(11, 30, params['batch_size'], 100, 3).cuda()
+    if torch.cuda.is_available:
+        model = RNN(11, 30, params['batch_size'], 100, 3).cuda()
+    else:
+        model = RNN(11, 30, params['batch_size'], 100, 3)
     load_model(model, file_name)
     train_on_df(model, candles, lr, num_epochs, 'RNN', debug=debug)
     save_model(model, file_name)
 
 def train_cnn(candles, file_name, lr, num_epochs, debug):
-    model = CNN().cuda()
+    model = (CNN().cuda() if torch.cuda.is_available() else CNN())
     load_model(model, file_name)
     train_on_df(model, candles, lr, num_epochs, 'CNN', debug=debug)
     save_model(model, file_name)

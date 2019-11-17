@@ -101,7 +101,7 @@ class RNN(nn.Module):
         """Initializes hidden state"""
         
         # Creates initial hidden state for GRU of zeroes
-        if self.eval_mode:
+        if (self.eval_mode or not torch.cuda.is_available()):
             hidden = torch.ones(self.num_layers, self.batch_size, hidden_size).cpu()
         else:
             hidden = torch.ones(self.num_layers, self.batch_size, hidden_size).cuda()
@@ -177,7 +177,10 @@ class GRUCNN(nn.Module):
         """Initializes hidden state"""
         
         # Creates initial hidden state for GRU of zeroes
-        hidden = torch.ones(self.num_layers, self.batch_size, hidden_size).cuda()
+        if torch.cuda.is_available():
+            hidden = torch.ones(self.num_layers, self.batch_size, hidden_size).cuda()
+        else:
+            hidden = torch.ones(self.num_layers, self.batch_size, hidden_size)
             
         return hidden
 
