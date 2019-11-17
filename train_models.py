@@ -18,7 +18,7 @@ torch.backends.cudnn.benchmark = True
 # Parameters
 params = {'batch_size': 1,
           'shuffle': True,
-          'num_workers': 5}
+          'num_workers': 1}
 
 def _train(train_dl, model, optim, error_func, debug=False):
     losses = []
