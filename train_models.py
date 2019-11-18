@@ -147,7 +147,7 @@ def train_on_df(model, candles_df, lr, num_epochs, model_type, debug):
     train(model=model, optim=optim, error_func=RMSE, num_epochs=num_epochs, train_dl=train_dl, valid_dl=valid_dl, debug=debug)
 
 def train_rnn(candles, file_name, lr, num_epochs, debug):
-    if torch.cuda.is_available:
+    if torch.cuda.is_available():
         model = RNN(11, 30, params['batch_size'], 100, 3).cuda()
     else:
         model = RNN(11, 30, params['batch_size'], 100, 3)
