@@ -10,7 +10,7 @@ import os
 import shutil
 import pandas as pd
 import numpy as np
-
+import time
 
 
 torch.backends.cudnn.benchmark = True
@@ -164,10 +164,8 @@ def train_cnn(candles, file_name, lr, num_epochs, debug):
 def split_df(dfm, chunk_size):
     """Split a dataframe into chunk_size smaller chunks"""
     def index_marks(nrows, chunk_size):
-        return range(1 * chunk_size, (nrows // chunk_size + 1) * chunk_size, chunk_size)
-
+        return range(1 * chunk_size, (nrows // chunk_size) * chunk_size, chunk_size)
     indices = index_marks(dfm.shape[0], chunk_size)
-
     return np.split(dfm, indices)
 
 if __name__ == '__main__':
@@ -181,15 +179,13 @@ if __name__ == '__main__':
     debug = False
     
     candles_big = pd.read_csv(datapath)
-
-
     chunks = split_df(candles_big, num_chunks)
-    start_chunk = int(input("Select chunk to start training from (out of {}) (default: 1): ".format(len(chunks))) or 1)
+    start_chunk = int(input("Select chunk to start training from (starting from 0 to {}) (default: 0): ".format(len(chunks)-1)) or 0)
     
     for i, candles_chunk in enumerate(chunks):
         if i < start_chunk: 
             continue
-        print("{}/{}".format(i, len(chunks)))
+        print("{}/{}".format(i, len(chunks)-1))
         if model == 'RNN':
             train_rnn(candles_chunk, outputpath, lr, epochs, debug)
         elif model == 'CNN':
