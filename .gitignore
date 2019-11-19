@@ -61,3 +61,9 @@ target/
 
 # Output default
 output
+
+# Notebook
+.ipynb_checkpoints
+
+# Binance bitcoin output
+bitcoin1m-GOOD.csv
