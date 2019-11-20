@@ -50,6 +50,9 @@ coverage.xml
 # Django stuff:
 *.log
 
+#MacOS
+.DS_Store
+
 # Sphinx documentation
 docs/_build/
 
@@ -67,3 +70,7 @@ output
 
 # Binance bitcoin output
 bitcoin1m-GOOD.csv
+
+# Images store
+images/
+
